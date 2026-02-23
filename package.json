@@ -10,10 +10,19 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.30",
+    "@ai-sdk/react": "^3.0.99",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "ai": "^6.0.97",
+    "framer-motion": "^12.34.3",
+    "lucide-react": "^0.575.0",
     "next": "15.4.10",
     "react": "19.1.1",
     "react-dom": "19.1.1",
-    "thirdweb": "^5"
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.0",
+    "thirdweb": "^5",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@types/node": "^20",
