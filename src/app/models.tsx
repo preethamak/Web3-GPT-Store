@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Zap, Shield, Sparkles, Code, Lock, MessageSquare, Wallet, RefreshCw } from 'lucide-react';
 import { useStore } from '@/store/useStore';
@@ -23,15 +23,24 @@ const MarketplacePage: React.FC = () => {
   const [purchasingModel, setPurchasingModel] = useState<string | null>(null);
   const activeAccount = useActiveAccount();
 
+  // Lazy client - safe during static generation (no env var at build time)
+  const client = useMemo(() => {
+    try {
+      return getClient();
+    } catch {
+      return null;
+    }
+  }, []);
+
   // Check NFT ownership on mount and when account changes
   useEffect(() => {
     const checkOwnership = async () => {
-      if (!activeAccount) return;
+      if (!activeAccount || !client) return;
 
       setIsCheckingOwnership(true);
       try {
         const contract = getContract({
-          client: getClient(),
+          client,
           chain: sepolia,
           address: CONTRACT_ADDRESS,
         });
@@ -66,12 +75,12 @@ const MarketplacePage: React.FC = () => {
   }, [activeAccount]);
 
   const checkNFTOwnership = async () => {
-    if (!activeAccount) return;
+    if (!activeAccount || !client) return;
 
     setIsCheckingOwnership(true);
     try {
       const contract = getContract({
-        client: getClient(),
+        client,
         chain: sepolia,
         address: CONTRACT_ADDRESS,
       });
@@ -125,7 +134,7 @@ const MarketplacePage: React.FC = () => {
 
     try {
       const contract = getContract({
-        client: getClient(),
+        client: client!,
         chain: sepolia,
         address: CONTRACT_ADDRESS,
       });
@@ -223,10 +232,10 @@ const MarketplacePage: React.FC = () => {
         >
           {/* Connect Wallet Button */}
           <div className="flex justify-center items-center gap-4 mb-6">
-            <ConnectButton
-              client={getClient()}
+            {client && <ConnectButton
+              client={client}
               chain={sepolia}
-            />
+            />}
             {activeAccount && (
               <button
                 onClick={checkNFTOwnership}
@@ -347,10 +356,10 @@ const MarketplacePage: React.FC = () => {
                     <>
                       {!activeAccount ? (
                         <div className="w-full">
-                          <ConnectButton
-                            client={getClient()}
+                          {client && <ConnectButton
+                            client={client}
                             chain={sepolia}
-                          />
+                          />}
                         </div>
                       ) : (
                         <button
