@@ -11,3 +11,6 @@ if (!clientId) {
 export const client = createThirdwebClient({
   clientId: clientId,
 });
+
+// Price configuration
+export const NFT_PRICE_ETH = "0.001"; // 0.001 ETH per NFT

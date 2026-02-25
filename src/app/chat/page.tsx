@@ -1,31 +1,37 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import Sidebar from '@/components/Sidebar';
-import ChatInterface from '@/app/ChatInterface';
-import { useStore } from '@/store/useStore';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import ChatInterface from '@/components/ChatInterface';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 export default function ChatPage() {
   useKeyboardShortcuts();
-  const { models, activeModel } = useStore();
-  const router = useRouter();
-  const purchasedModels = models.filter(m => m.purchased);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    // If no models purchased, redirect to marketplace
-    if (purchasedModels.length === 0) {
-      router.push('/marketplace');
-    }
-  }, [purchasedModels.length, router]);
+    // Small delay to ensure localStorage is loaded
+    const timer = setTimeout(() => {
+      setIsChecking(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loading while checking
+  if (isChecking) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500 mx-auto mb-4"></div>
+          <p className="text-[var(--text-secondary)]">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <ChatInterface />
-      </div>
+    <div className="flex h-screen overflow-hidden bg-[var(--bg-primary)]">
+      <ChatInterface />
     </div>
   );
 }

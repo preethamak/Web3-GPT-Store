@@ -27,6 +27,7 @@ export interface Model {
   capabilities: string[];
   purchased: boolean;
   featured?: boolean;
+  tokenId: number;
 }
 
 interface AppState {
@@ -65,24 +66,26 @@ export const useStore = create<AppState>()(
       
       models: [
         {
-          id: 'contract-writer',
-          name: 'Contract Writer',
-          description: 'AI-powered smart contract generator. Describe your contract requirements and get production-ready Solidity code with best practices.',
-          price: 49.99,
-          icon: '📝',
-          capabilities: ['Contract Generation', 'Security Patterns', 'Gas Optimization', 'Documentation'],
-          purchased: false,
-          featured: true,
-        },
-        {
           id: 'auditor',
           name: 'Smart Contract Auditor',
           description: 'Advanced security auditor that analyzes your smart contracts for vulnerabilities, provides detailed reports with syntax highlighting.',
-          price: 79.99,
+          price: 0.001,
           icon: '🔍',
           capabilities: ['Vulnerability Detection', 'Gas Analysis', 'Best Practices', 'Detailed Reports'],
           purchased: false,
           featured: true,
+          tokenId: 0,
+        },
+        {
+          id: 'contract-writer',
+          name: 'Contract Writer',
+          description: 'AI-powered smart contract generator. Describe your contract requirements and get production-ready Solidity code with best practices.',
+          price: 0.001,
+          icon: '📝',
+          capabilities: ['Contract Generation', 'Security Patterns', 'Gas Optimization', 'Documentation'],
+          purchased: false,
+          featured: true,
+          tokenId: 1,
         },
       ],
       
@@ -166,11 +169,30 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'app-storage',
+      version: 1, // Increment this when schema changes
       partialize: (state) => ({
         models: state.models,
         conversations: state.conversations,
         activeModel: state.activeModel,
       }),
+      migrate: (persistedState: any, version: number) => {
+        // Migration from version 0 to 1: Add tokenId to models
+        if (version === 0) {
+          const tokenIdMap: Record<string, number> = {
+            'auditor': 0,
+            'contract-writer': 1,
+          };
+          
+          if (persistedState.models) {
+            persistedState.models = persistedState.models.map((model: any) => ({
+              ...model,
+              tokenId: tokenIdMap[model.id] ?? 0,
+              price: 0.001, // Update to ETH price
+            }));
+          }
+        }
+        return persistedState;
+      },
     }
   )
 );

@@ -9,10 +9,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-variation-settings: "slnt" 0;
   
   /* Professional Color Palette */
   --color-primary: #8b5cf6;
@@ -39,10 +37,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  
   body {
     @apply bg-[var(--bg-primary)] text-[var(--text-primary)];
   }
@@ -207,4 +201,100 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
                 0 0 30px rgba(139, 92, 246, 0.2);
   }
+}
+
+/* Markdown Prose Styling */
+.prose {
+  @apply text-[var(--text-primary)];
+  max-width: 65ch;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  @apply font-bold mb-3 mt-6 text-[var(--text-primary)];
+}
+
+.prose h1 { @apply text-2xl; }
+.prose h2 { @apply text-xl; }
+.prose h3 { @apply text-lg; }
+
+.prose ul, .prose ol {
+  @apply mb-4 pl-6 space-y-2;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose li {
+  @apply text-[var(--text-secondary)];
+}
+
+.prose strong {
+  @apply font-semibold text-[var(--text-primary)];
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-violet-500 pl-4 py-2 italic text-[var(--text-secondary)] my-4;
+}
+
+.prose a {
+  @apply text-violet-400 hover:text-violet-300 underline;
+}
+
+.prose code:not(pre code) {
+  @apply bg-[var(--bg-tertiary)] px-2 py-0.5 rounded text-violet-300 text-sm font-mono;
+}
+
+.prose pre {
+  @apply bg-[var(--bg-tertiary)] rounded-xl p-4 my-4 overflow-x-auto border border-[var(--border-secondary)];
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-sm font-mono;
+}
+
+.prose table {
+  @apply w-full border-collapse my-4;
+}
+
+.prose th, .prose td {
+  @apply border border-[var(--border-secondary)] px-4 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-[var(--bg-secondary)] font-semibold;
+}
+
+.prose hr {
+  @apply border-[var(--border-secondary)] my-6;
+}
+
+/* Code block specific styling */
+.prose pre[class*="language-"] {
+  @apply rounded-xl my-4 shadow-lg;
+}
+
+/* Syntax highlighter overrides */
+pre[class*="language-"] {
+  @apply !bg-[#1e1e2e] !rounded-xl !border !border-[var(--border-secondary)] !shadow-lg;
+  margin: 1rem 0 !important;
+}
+
+code[class*="language-"] {
+  @apply !text-sm;
+  font-family: var(--font-fira-code), 'Fira Code', 'Monaco', 'Courier New', monospace !important;
 }
