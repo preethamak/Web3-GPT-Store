@@ -5,10 +5,20 @@ import { Brain, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { ConnectButton } from 'thirdweb/react';
 import { getClient } from '@/app/client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Initialize client only once and only in browser (not during SSR)
+  const client = useMemo(() => {
+    try {
+      return getClient();
+    } catch (e) {
+      console.warn('Client unavailable during render');
+      return null;
+    }
+  }, []);
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -54,7 +64,7 @@ export default function Header() {
           {/* Wallet & Mobile Menu */}
           <div className="flex items-center gap-3 md:gap-4">
             <div className="hidden lg:block">
-              <ConnectButton client={getClient()} />
+              {client && <ConnectButton client={client} />}
             </div>
 
             <button
@@ -89,7 +99,7 @@ export default function Header() {
               </Link>
             ))}
             <div className="pt-2">
-              <ConnectButton client={getClient()} />
+              {client && <ConnectButton client={client} />}
             </div>
           </div>
         </motion.div>

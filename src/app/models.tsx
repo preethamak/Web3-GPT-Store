@@ -8,7 +8,7 @@ import { AnimatedCard, GlowButton } from '@/components/3DElements';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ConnectButton, useActiveAccount } from 'thirdweb/react';
-import { client, NFT_PRICE_ETH } from './client';
+import { getClient, NFT_PRICE_ETH } from './client';
 import { sepolia } from 'thirdweb/chains';
 import { getContract, prepareContractCall, readContract, sendTransaction } from 'thirdweb';
 import { CONTRACT_ADDRESS } from '@/lib/constants';
@@ -31,7 +31,7 @@ const MarketplacePage: React.FC = () => {
       setIsCheckingOwnership(true);
       try {
         const contract = getContract({
-          client,
+          client: getClient(),
           chain: sepolia,
           address: CONTRACT_ADDRESS,
         });
@@ -71,7 +71,7 @@ const MarketplacePage: React.FC = () => {
     setIsCheckingOwnership(true);
     try {
       const contract = getContract({
-        client,
+        client: getClient(),
         chain: sepolia,
         address: CONTRACT_ADDRESS,
       });
@@ -125,7 +125,7 @@ const MarketplacePage: React.FC = () => {
 
     try {
       const contract = getContract({
-        client,
+        client: getClient(),
         chain: sepolia,
         address: CONTRACT_ADDRESS,
       });
@@ -224,7 +224,7 @@ const MarketplacePage: React.FC = () => {
           {/* Connect Wallet Button */}
           <div className="flex justify-center items-center gap-4 mb-6">
             <ConnectButton
-              client={client}
+              client={getClient()}
               chain={sepolia}
             />
             {activeAccount && (
@@ -252,7 +252,7 @@ const MarketplacePage: React.FC = () => {
           
           <p className="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
             Professional AI models for smart contract development and auditing.
-            Purchase NFTs at {NFT_PRICE_ETH} ETH each to unlock AI models forever.
+            Purchase NFTs at 0.001 ETH each to unlock AI models forever.
           </p>
 
           {purchaseSuccess && (
@@ -325,7 +325,7 @@ const MarketplacePage: React.FC = () => {
                 {/* Pricing */}
                 <div className="flex items-baseline mb-6">
                   <span className="text-4xl font-bold gradient-text">
-                    {NFT_PRICE_ETH} ETH
+                    0.001 ETH
                   </span>
                   <span className="text-[var(--text-tertiary)] ml-2">one-time</span>
                 </div>
@@ -348,7 +348,7 @@ const MarketplacePage: React.FC = () => {
                       {!activeAccount ? (
                         <div className="w-full">
                           <ConnectButton
-                            client={client}
+                            client={getClient()}
                             chain={sepolia}
                           />
                         </div>

@@ -20,17 +20,8 @@ export const getClient = () => {
   return cachedClient;
 };
 
-// For backward compatibility, export a direct client (will throw if env var missing)
-export const client = (() => {
-  try {
-    return getClient();
-  } catch (e) {
-    // Return a placeholder object that has the right shape
-    // This prevents module load errors while still failing when actually used
-    console.warn('Client will be unavailable - missing NEXT_PUBLIC_TEMPLATE_CLIENT_ID');
-    return null as any;
-  }
-})();
+// IMPORTANT: Don't export eager client - use getClient() function instead
+// This ensures client initialization only happens at runtime, not during static generation
 
 // Price configuration
 export const NFT_PRICE_ETH = "0.001"; // 0.001 ETH per NFT
