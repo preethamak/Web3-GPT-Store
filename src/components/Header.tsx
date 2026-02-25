@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Brain, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { ConnectButton } from 'thirdweb/react';
-import { client } from '@/app/client';
+import { getClient } from '@/app/client';
 import { useState } from 'react';
 
 export default function Header() {
@@ -54,7 +54,7 @@ export default function Header() {
           {/* Wallet & Mobile Menu */}
           <div className="flex items-center gap-3 md:gap-4">
             <div className="hidden lg:block">
-              <ConnectButton client={client} />
+              <ConnectButton client={getClient()} />
             </div>
 
             <button
@@ -89,7 +89,7 @@ export default function Header() {
               </Link>
             ))}
             <div className="pt-2">
-              <ConnectButton client={client} />
+              <ConnectButton client={getClient()} />
             </div>
           </div>
         </motion.div>

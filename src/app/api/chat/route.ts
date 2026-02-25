@@ -3,7 +3,7 @@ import { streamText } from 'ai';
 import { getSystemPrompt } from '@/lib/prompts';
 import { getContract, readContract } from 'thirdweb';
 import { sepolia } from 'thirdweb/chains';
-import { client } from '@/app/client';
+import { getClient } from '@/app/client';
 import { CONTRACT_ADDRESS, MODEL_TO_TOKEN_ID } from '@/lib/constants';
 
 export const runtime = 'edge';
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       // Verify NFT ownership using thirdweb SDK
       try {
         const contract = getContract({
-          client,
+          client: getClient(),
           chain: sepolia,
           address: CONTRACT_ADDRESS,
         });

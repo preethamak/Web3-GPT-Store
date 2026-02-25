@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
 import { getContract } from 'thirdweb';
 import { sepolia } from 'thirdweb/chains';
-import { client } from '@/app/client';
+import { getClient } from '@/app/client';
 import { balanceOf } from 'thirdweb/extensions/erc1155';
 import { useStore } from '@/store/useStore';
 import {
@@ -53,7 +53,7 @@ export default function ChatInterface() {
     const checkOwnership = async () => {
       if (!account?.address) { setOwnedModels([MODELS[0]]); return; }
       try {
-        const contract = getContract({ client, chain: sepolia, address: CONTRACT_ADDRESS });
+        const contract = getContract({ client: getClient(), chain: sepolia, address: CONTRACT_ADDRESS });
         const owned = [MODELS[0]];
         for (const model of MODELS.slice(1)) {
           try {
