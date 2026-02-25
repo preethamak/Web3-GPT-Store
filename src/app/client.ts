@@ -1,15 +1,20 @@
 import { createThirdwebClient } from "thirdweb";
 
-// Replace this with your client ID string
-// refer to https://portal.thirdweb.com/typescript/v5/client on how to get a client ID
-const clientId = process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID;
-
-if (!clientId) {
-  throw new Error("No client ID provided");
-}
+// Get client ID from environment - safe for build time
+const getClientId = () => {
+  const clientId = process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID;
+  // During build, return placeholder to avoid build errors
+  if (typeof window === 'undefined' && !clientId) {
+    return 'build-time-placeholder';
+  }
+  if (!clientId) {
+    throw new Error('No client ID provided. Set NEXT_PUBLIC_TEMPLATE_CLIENT_ID.');
+  }
+  return clientId;
+};
 
 export const client = createThirdwebClient({
-  clientId: clientId,
+  clientId: getClientId(),
 });
 
 // Price configuration
